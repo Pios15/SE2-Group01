@@ -1,0 +1,8 @@
+
+
+POST http://localhost:3001/api/ticket/create
+Content-Type: application/json
+
+{
+    "serviceId": 1
+}
