@@ -1,0 +1,4 @@
+{
+  "client/**/*.{js,jsx}": ["eslint --cache --fix --config client/eslint.config.js 'client/**/*.{js,jsx,mjs}'", "prettier --write 'client/**/*.{js,jsx,mjs}'"],
+  "server/**/*.{js,mjs}": ["eslint --cache --fix --config server/eslint.config.mjs 'server/**/*.{js,mjs}'", "prettier --write 'server/**/*.{js,mjs}'"]
+}
