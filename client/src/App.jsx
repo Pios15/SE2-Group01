@@ -13,6 +13,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import QRCode from 'qrcode';
 
+import './components/gameStyle.css';
+
 const App = () => {
   const [showModal, setShowModal] = useState(false);
   const [serviceDescription, setServiceDescription] = useState('');
