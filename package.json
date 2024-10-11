@@ -8,7 +8,7 @@
   "scripts": {
     "client": "cd client && npm run dev",
     "server": "cd server && npm start",
-    "install-all": "npm install --prefix client && npm install --prefix server && npm install",
+    "install-all": "npm install && npm install --prefix client && npm install --prefix server",
     "lint": "npm run lint:check -- --fix",
     "lint:check": "npm run lint:check:client && npm run lint:check:server",
     "lint:check:client": "eslint --config client/eslint.config.js \"client/**/*.{js,jsx}\"",
