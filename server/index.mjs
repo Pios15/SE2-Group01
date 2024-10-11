@@ -28,8 +28,12 @@ app.post('/api/ticket/create', async (req, res) => {
   const serviceID = req.body.serviceId;
   const service_name = 'Service 1'; // TODO: replace with actual service name (get service name)
   const issue_date = new Date();
-  const ticketId = 1; // TODO: replace with actual ticket ID (await ticketDAO.getTicket(serviceID);)
-  const pdfPath = `./tickets/${ticketId}.pdf`;
+  const ticket = {
+    ticketId: 1,
+    eta: 10,
+  }; // TODO: replace with actual ticket ID (await ticketDAO.getTicket(serviceID);)
+
+  const pdfPath = `./tickets/${ticket.ticketId}.pdf`;
   const doc = new PDFDocument();
   doc.pipe(fs.createWriteStream(pdfPath));
   doc
@@ -40,7 +44,7 @@ app.post('/api/ticket/create', async (req, res) => {
     .moveDown(2);
   doc
     .fontSize(20)
-    .text(`Ticket Number: ${ticketId}`, {
+    .text(`Ticket Number: ${ticket.ticketId}`, {
       align: 'left',
     })
     .moveDown(1);
@@ -57,11 +61,17 @@ app.post('/api/ticket/create', async (req, res) => {
         align: 'left',
       },
     )
+    .moveDown(1);
+  doc
+    .fontSize(20)
+    .text(`Estimated Time: ${ticket.eta} minutes`, {
+      align: 'left',
+    })
     .moveDown(2);
   doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
   doc.end();
   // generate qr code
-  const downloadUrl = baseUrl + `/api/ticket/download/${ticketId}`;
+  const downloadUrl = baseUrl + `/api/ticket/download/${ticket.ticketId}`;
   const qrcode = await QRCode.toDataURL(downloadUrl);
 
   res.json({ qrcode });
