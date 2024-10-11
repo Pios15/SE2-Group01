@@ -1,0 +1,35 @@
+/* Primary Fonts */
+.primary-font-baloo {
+    font-family: 'Baloo 2', cursive;
+  }
+  
+  .primary-font-fredoka {
+    font-family: 'Fredoka One', cursive;
+  }
+  
+  .primary-font-luckiest {
+    font-family: 'Luckiest Guy', cursive;
+  }
+  
+  .primary-font-bangers {
+    font-family: 'Bangers', cursive;
+  }
+  
+  /* Secondary Fonts */
+  .secondary-font-roboto {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .secondary-font-open-sans {
+    font-family: 'Open Sans', sans-serif;
+  }
+  
+  .green-button {
+    background-color: green !important;
+    color: white !important;
+  }
+  
+  .red-button {
+    background-color: red !important;
+    color: white !important;
+  }
