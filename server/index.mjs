@@ -11,7 +11,6 @@ const app = new express();
 app.use(morgan('dev'));
 app.use(express.json());
 
-// eslint-disable-next-line no-unused-vars
 const ticketDAO = new TicketDAO();
 
 const port = 3001;
@@ -94,5 +93,26 @@ app.get('/api/ticket/download/:ticketId', (req, res) => {
     });
   } else {
     res.status(404).send('File not found');
+  }
+});
+
+// Change user status
+
+app.put('/api/ticket/:number', async (req, res) => {
+  const ticket_number = req.params.ticket_number;
+  const new_status_code = req.body.status;
+
+  if (!ticket_number || !new_status_code) {
+    return res.status(400).send('Invalid ticket number or status');
+  }
+
+  try {
+    const updated_status = await ticketDAO.change_status(
+      ticket_number,
+      new_status_code,
+    );
+    res.status(200).json(updated_status);
+  } catch (error) {
+    res.status(500).json({ 'Database error': error.message });
   }
 });
