@@ -19,7 +19,7 @@ app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
 
-// Create ticket
+// Create ticket -- TO DO
 
 app.post('/api/ticket/create', async (req, res) => {
   // receive type of service

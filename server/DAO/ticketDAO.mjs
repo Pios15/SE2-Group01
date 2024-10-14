@@ -115,24 +115,16 @@ export default function TicketDAO() {
   this.getTicket = async id_service => {
     const ticket_number = await this.compute_next_ticket_number(id_service);
     const status = 'Waiting';
-    const estimated_time = 0; //va preso dalla funzione
 
     return new Promise((resolve, reject) => {
       db.run(
-        'INSERT INTO tickets (ticket_number, estimated_time, status, service) VALUES (?, ?, ?, ?)',
-        [ticket_number, estimated_time, status, id_service],
+        'INSERT INTO tickets (ticket_number, status, service) VALUES (?, ?, ?)',
+        [ticket_number, status, id_service],
         function (error) {
           if (error) {
             reject(error);
           } else {
-            const id = this.lastID;
-            const ticketData = new Ticket(
-              id,
-              ticket_number,
-              estimated_time,
-              status,
-              id_service,
-            );
+            const ticketData = new Ticket(ticket_number, status, id_service);
             const url = `http://localhost:3000/ticket/${ticketData.ticket_id}`;
             QRCode.toDataURL(url, (err, qrCodeUrl) => {
               if (err) {
