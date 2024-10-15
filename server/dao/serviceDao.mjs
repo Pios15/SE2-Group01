@@ -3,10 +3,16 @@ import { db } from '../db.mjs';
 export function getAverageSpentTimeByService(service_id) {
   return new Promise((resolve, reject) => {
     const query = `
-            SELECT AVG(spent_time) AS avg_spent_time
-            FROM history
-            WHERE service_type = ?;
-        `;
+      SELECT AVG(spent_time) AS avg_spent_time
+      FROM (
+        SELECT spent_time
+        FROM history
+        WHERE service_type = ?
+        ORDER BY id DESC
+        LIMIT 100
+      ) AS latest_history;
+    `;
+
     db.get(query, [service_id], (err, row) => {
       if (err) return reject(err);
       resolve(row && row.avg_spent_time ? row.avg_spent_time : 0);
