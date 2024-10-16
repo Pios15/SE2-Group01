@@ -8,16 +8,16 @@ export async function updateServiceAverageTime(req, res) {
 
   try {
     // Fetch average spent time from history
-    const avgSpentTime = await getAverageSpentTimeByService(service_id);
+    const avgTimeSpent = await getAverageSpentTimeByService(service_id);
 
     // Update service's average_time field
-    await updateAverageTime(service_id, avgSpentTime);
+    await updateAverageTime(service_id, avgTimeSpent);
 
     // Send success response
     res.json({
       success: true,
       message: `Average time for service ID ${service_id} updated successfully.`,
-      average_time: avgSpentTime,
+      average_time: avgTimeSpent,
     });
   } catch (error) {
     // Handle errors
