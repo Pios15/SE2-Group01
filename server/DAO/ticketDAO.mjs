@@ -125,14 +125,7 @@ export default function TicketDAO() {
             reject(error);
           } else {
             const ticketData = new Ticket(ticket_number, status, id_service);
-            const url = `http://localhost:3000/ticket/${ticketData.ticket_id}`;
-            QRCode.toDataURL(url, (err, qrCodeUrl) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve({ ticketData, qrCodeUrl });
-              }
-            });
+            resolve(ticketData);
           }
         },
       );
@@ -155,6 +148,22 @@ export default function TicketDAO() {
             reject(error);
           } else {
             resolve(statusMap[new_status_code]);
+          }
+        },
+      );
+    });
+  };
+
+  this.get_service_name = id_service => {
+    return new Promise((resolve, reject) => {
+      db.get(
+        'SELECT name FROM service WHERE id = ?',
+        [id_service],
+        (error, row) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(row.name);
           }
         },
       );

@@ -19,18 +19,11 @@ app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
 
-// Create ticket -- TO DO
-
 app.post('/api/ticket/create', async (req, res) => {
-  // receive type of service
-  // eslint-disable-next-line no-unused-vars
   const serviceID = req.body.serviceId;
-  const service_name = 'Service 1'; // TODO: replace with actual service name (get service name)
+  const ticket = await ticketDAO.getTicket(serviceID);
+  const service_name = await ticketDAO.get_service_name();
   const issue_date = new Date();
-  const ticket = {
-    ticketId: 1,
-    eta: 10,
-  }; // TODO: replace with actual ticket ID (await ticketDAO.getTicket(serviceID);)
 
   const pdfPath = `./tickets/${ticket.ticketId}.pdf`;
   const doc = new PDFDocument();
@@ -80,12 +73,11 @@ app.post('/api/ticket/create', async (req, res) => {
 
 app.get('/api/ticket/download/:ticketId', (req, res) => {
   const ticketId = req.params.ticketId;
+  const ticket = ticketDAO.getTicket(ticketId);
   if (!ticketId) {
     res.status(400).send('Ticket ID is required');
   }
-  //const pdfPath = getPath(ticketId); TODO: replace with actual path
-  if (fs.existsSync(`./tickets/${ticketId}.pdf`)) {
-    // TODO: && ticket
+  if (fs.existsSync(`./tickets/${ticketId}.pdf`) && ticket) {
     res.download(`./tickets/${ticketId}.pdf`, `ticket-${ticketId}.pdf`, err => {
       if (err) {
         res.status(404).send('Error downloading file');
