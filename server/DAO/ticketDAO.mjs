@@ -18,6 +18,9 @@ export default function TicketDAO() {
               3: 'C',
               4: 'D',
             };
+            if (row === undefined) {
+              resolve(`1${serviceLetterMap[id_service]}`);
+            }
             const lastTicketNumber = row
               ? parseInt(row.ticket_number.slice(0, -1))
               : 0;
