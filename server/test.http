@@ -6,3 +6,14 @@ Content-Type: application/json
 {
     "serviceId": 1
 }
+
+###
+GET http://localhost:3001/api/ticket/waitingTime/Service%20A
+
+###
+PUT http://localhost:3001/api/ticket/5A
+Content-Type: application/json
+
+{
+    "status": 1
+}
