@@ -63,9 +63,10 @@ router.post('/create', async (req, res) => {
     doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
     doc.end();
     // generate qr code
-    const downloadUrl = baseUrl + `/api/ticket/download/${ticket.ticketId}`;
+    const downloadUrl =
+      baseUrl + `/api/ticket/download/${ticket.ticket_number}`;
     const qrcode = await QRCode.toDataURL(downloadUrl);
-    res.json({ qrcode });
+    res.status(200).json({ qrcode });
   } catch (error) {
     console.warn('Error creating ticket', error);
     res.status(500).json({ 'Database error': error.message });

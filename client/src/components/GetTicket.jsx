@@ -12,12 +12,15 @@ import {
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { createTicket } from '../../API/API';
+
 function GetTicket() {
   const [showModal, setShowModal] = useState(false);
   const [serviceDescription, setServiceDescription] = useState('');
   const [serviceTitle, setServiceTitle] = useState('');
   const [qrCode, setQrCode] = useState(null); // State to store the QR code image
   const [loadingQrCode, setLoadingQrCode] = useState(false); // State for loading
+  const [serviceId, setServiceId] = useState();
 
   const handleShowModal = (title, description) => {
     setServiceTitle(title);
@@ -39,7 +42,7 @@ function GetTicket() {
       setLoadingQrCode(true); // Start loading state
 
       // Generate the QR code from the random string
-      const generatedQrCode = null;
+      const generatedQrCode = await createTicket(serviceId);
 
       // Set the QR code in state
       setQrCode(generatedQrCode);
@@ -108,12 +111,13 @@ function GetTicket() {
                                   padding: '10px 20px', // Button padding
                                   borderRadius: '10px', // Rounded corners
                                 }}
-                                onClick={() =>
+                                onClick={() => {
                                   handleShowModal(
                                     'Mail Service',
                                     'Send and receive emails securely at our post office.',
-                                  )
-                                }
+                                  );
+                                  setServiceId(1);
+                                }}
                               >
                                 <img
                                   src="./images/email.png"
@@ -144,12 +148,13 @@ function GetTicket() {
                                   padding: '10px 20px', // Button padding
                                   borderRadius: '5px', // Rounded corners
                                 }}
-                                onClick={() =>
+                                onClick={() => {
+                                  setServiceId(2);
                                   handleShowModal(
                                     'Delivery Service',
                                     'We offer fast and reliable parcel delivery services.',
-                                  )
-                                }
+                                  );
+                                }}
                               >
                                 <img
                                   src="./images/delivery.png"
@@ -180,12 +185,13 @@ function GetTicket() {
                                   padding: '10px 20px', // Button padding
                                   borderRadius: '5px', // Rounded corners
                                 }}
-                                onClick={() =>
+                                onClick={() => {
+                                  setServiceId(3);
                                   handleShowModal(
                                     'Mobile Banking',
                                     'Manage your finances and payments through our mobile banking services.',
-                                  )
-                                }
+                                  );
+                                }}
                               >
                                 <img
                                   src="./images/mobile-banking.png"
