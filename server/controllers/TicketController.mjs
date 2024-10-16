@@ -6,39 +6,27 @@ import {
   getServiceTime,
 } from '../dao/TicketDao.mjs';
 
-export async function getWaitingTime(serviceType) {
-  return convertDecimalToTime(await calculateWaitingTime(serviceType));
-}
-
-async function calculateWaitingTime(serviceType) {
-  const serviceTime = await getServiceTime(serviceType);
-  const numberPeople = await getNumberPeopleForRequest(serviceType);
-  const calculateTypeOfServicevar = await calculateTypeOfService();
-  console.log(serviceTime);
-  console.log(numberPeople);
-  console.log(calculateTypeOfServicevar);
-  return serviceTime * (numberPeople / calculateTypeOfServicevar + 1 / 2);
-}
-
-async function calculateTypeOfService() {
-  let total = 0;
+async function getWaitingTime(serviceType) {
+  const serviceTimeForRequest = await getServiceTime(serviceType);
+  const numberPeopleForRequest = await getNumberPeopleForRequest(serviceType);
   let counters = await getCounters();
 
   const results = await Promise.all(
     counters.map(async i => {
-      let numberServicebyCounter = await getNumberOfServicesServed(i);
+      let numberServicebyCounter = await getNumberOfServicesServed(i.id);
       if (numberServicebyCounter === 0) {
         return 0;
       }
-
-      let canServe = await canCounterServe(i);
+      const canServe = (await canCounterServe(i)) ? 1 : 0;
       return (1 / numberServicebyCounter) * canServe;
     }),
   );
 
-  total = results.reduce((acc, result) => acc + result, 0);
+  const total = results.reduce((acc, result) => acc + result, 0);
 
-  return total;
+  let result = serviceTimeForRequest * (numberPeopleForRequest / total + 1 / 2);
+
+  return convertDecimalToTime(result);
 }
 
 function convertDecimalToTime(decimalHours) {
@@ -47,3 +35,6 @@ function convertDecimalToTime(decimalHours) {
 
   return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 }
+export const TicketController = {
+  getWaitingTime,
+};
