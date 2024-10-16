@@ -9,3 +9,5 @@ app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
 app.use('/ticket', ticketRoutes);
+
+export { app };
