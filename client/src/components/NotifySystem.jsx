@@ -1,36 +1,26 @@
 import { useState } from 'react';
 import { Button, Card, Col, Container, Modal, Row } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { changeTicketStatus } from '../../API/API';
 import '../components/gameStyle.css';
 
-function NotifySistem() {
+function NotifySystem() {
+  const { ticketId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState('');
 
-  const handleShowModal = content => {
-    setModalContent(content);
-    setShowModal(true);
-  }; //TO DO: change with the other function handleShowModal
-
-  /*const handleShowModal = async (status, content) => {
-      const response = await fetch('/api/change_status', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status }),
-      }); //TO DO: change with the correct API
-
-      if (response.ok) {
-        await response.json();
-        setModalContent(content);
-        setShowModal(true);
-      } else {
-        throw new Error('Failed to change status');
-      }
-  };*/
+  const handleShowModal = async (status, content) => {
+    const res = await changeTicketStatus(status, ticketId);
+    if (res) {
+      setModalContent(content);
+      setShowModal(true);
+    } else {
+      throw new Error('Failed to change status');
+    }
+  };
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -80,7 +70,7 @@ function NotifySistem() {
                     fontSize: '18px',
                   }}
                   onClick={() =>
-                    handleShowModal('This ticket has been canceled.')
+                    handleShowModal(2, 'This ticket has been canceled.')
                   }
                 >
                   Cancel
@@ -97,7 +87,7 @@ function NotifySistem() {
                     fontSize: '18px',
                   }}
                   onClick={() =>
-                    handleShowModal('This ticket is currently in progress.')
+                    handleShowModal(3, 'This ticket is currently in progress.')
                   }
                 >
                   Serving
@@ -114,7 +104,10 @@ function NotifySistem() {
                     fontSize: '18px',
                   }}
                   onClick={() =>
-                    handleShowModal('This ticket has been served successfully.')
+                    handleShowModal(
+                      1,
+                      'This ticket has been served successfully.',
+                    )
                   }
                 >
                   Done
@@ -140,4 +133,4 @@ function NotifySistem() {
   );
 }
 
-export default NotifySistem;
+export default NotifySystem;

@@ -5,7 +5,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import GetTicket from './components/GetTicket';
-import NotifySistem from './components/NotifySistem';
+import NotifySystem from './components/NotifySystem';
 import DisplayCall from './components/displayCall';
 import './components/gameStyle.css';
 
@@ -25,11 +25,11 @@ const App = () => {
         <Routes>
           <Route
             path="/displayCall"
-            element={<DisplayCall counter="1" ticketnumber="A1" />}
+            element={<DisplayCall counter="1" ticketNumber="1A" />}
           />
 
           <Route path="/" element={<GetTicket />} />
-          <Route path="/notifySistem" element={<NotifySistem />} />
+          <Route path="/notifySystem/:ticketId" element={<NotifySystem />} />
         </Routes>
       </Container>
     </div>

@@ -2,7 +2,7 @@ import { Card, Col, Container, Row } from 'react-bootstrap/';
 
 import PropTypes from 'prop-types';
 
-function DisplayCall({ counter, ticketnumber }) {
+function DisplayCall({ counter, ticketNumber }) {
   return (
     <Container fluid className="flex-grow-1 d-flex flex-column min-w-80">
       <div>
@@ -61,7 +61,7 @@ function DisplayCall({ counter, ticketnumber }) {
                   {/* Text Row */}
                   <Row className="justify-content-center align-items-center">
                     <Col className="text-bold" style={{ fontSize: '120px' }}>
-                      <div className="large-number">{ticketnumber}</div>
+                      <div className="large-number">{ticketNumber}</div>
                     </Col>
                     <Col className="text-bold" style={{ fontSize: '120px' }}>
                       <div className="large-number">{counter}</div>
@@ -79,7 +79,7 @@ function DisplayCall({ counter, ticketnumber }) {
 
 DisplayCall.propTypes = {
   counter: PropTypes.string,
-  ticketnumber: PropTypes.string,
+  ticketNumber: PropTypes.string,
 };
 
 export default DisplayCall;
