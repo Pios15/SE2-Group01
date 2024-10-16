@@ -22,7 +22,7 @@ function DisplayCall({ counter, ticketnumber }) {
                 <Card.Body className="text-center">
                   {/* Images Row */}
                   <Row className="justify-content-center align-items-center mb-4">
-                    <Col style={{ marginRight: '13rem' }}>
+                    <Col className="d-flex justify-content-center">
                       <img
                         src="../../public/images/walking.png"
                         alt="icon description"
@@ -60,10 +60,7 @@ function DisplayCall({ counter, ticketnumber }) {
 
                   {/* Text Row */}
                   <Row className="justify-content-center align-items-center">
-                    <Col
-                      className="text-bold"
-                      style={{ fontSize: '120px', marginRight: '10rem' }}
-                    >
+                    <Col className="text-bold" style={{ fontSize: '120px' }}>
                       <div className="large-number">{ticketnumber}</div>
                     </Col>
                     <Col className="text-bold" style={{ fontSize: '120px' }}>
