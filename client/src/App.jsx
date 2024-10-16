@@ -29,8 +29,7 @@ const App = () => {
           />
 
           <Route path="/" element={<GetTicket />} />
-
-          <Route path="/notifySystem" element={<NotifySistem />} />
+          <Route path="/notifySistem" element={<NotifySistem />} />
         </Routes>
       </Container>
     </div>
