@@ -95,6 +95,7 @@ export default function TicketDAO() {
       const sql = 'select average_time from service where name = ?';
       db.get(sql, [type], (err, row) => {
         if (err) reject(err);
+        else if (!row) reject('Service not found');
         resolve(row.average_time);
       });
     });
@@ -106,6 +107,7 @@ export default function TicketDAO() {
         "select count(*) as total_people from ticket,service where service_ref = id and name = ? and status = 'Waiting'  ";
       db.get(sql, [service_ref], (err, row) => {
         if (err) reject(err);
+        if (!row) reject('Service not found');
         resolve(row.total_people);
       });
     });
@@ -114,8 +116,9 @@ export default function TicketDAO() {
   this.getNumberOfServicesServed = counter_id => {
     return new Promise((resolve, reject) => {
       const sql = 'select count(*) as totCount from counter where number = ?';
-      db.get(sql, [counter_id.id], (err, row) => {
+      db.get(sql, [counter_id], (err, row) => {
         if (err) reject(err);
+        if (!row) reject('Counter not found');
         resolve(row.totCount);
       });
     });
@@ -131,14 +134,15 @@ export default function TicketDAO() {
     });
   };
 
-  this.canCounterServe = counter_id => {
+  this.canCounterServe = (id, serviceType) => {
     return new Promise((resolve, reject) => {
       const sql =
-        'select * from ticket where counter_id = ? and status = "in_progress"';
-      db.get(sql, [counter_id], (err, row) => {
+        'select count(*) FROM counter as c, service as s WHERE c.service_id = s.id AND c.id = ? AND s.name = ?';
+      db.get(sql, [id, serviceType], (err, row) => {
         if (err) reject(err);
-        if (row) resolve(0);
-        else resolve(1);
+        if (row) resolve(true);
+        else resolve(false);
+        resolve(row);
       });
     });
   };

@@ -11,12 +11,6 @@ const ticketDAO = new TicketDAO();
 
 export const router = express.Router();
 
-router.get('/waitingTime/:serviceType', (req, res, next) =>
-  getWaitingTime(req.params.serviceType)
-    .then(r => res.status(200).json(r))
-    .catch(err => next(err)),
-);
-
 router.post('/create', async (req, res) => {
   const serviceID = req.body.serviceId;
   try {
@@ -25,7 +19,7 @@ router.post('/create', async (req, res) => {
     const issue_date = new Date();
 
     const pdfPath = `./tickets/${ticket.ticket_number}.pdf`;
-    const eta = 7; // TO DO: calculate ETA
+    const eta = await getWaitingTime(service_name);
     const doc = new PDFDocument();
     doc.pipe(fs.createWriteStream(pdfPath));
     doc
