@@ -21,52 +21,57 @@ app.listen(port, () => {
 
 app.post('/api/ticket/create', async (req, res) => {
   const serviceID = req.body.serviceId;
-  const ticket = await ticketDAO.getTicket(serviceID);
-  const service_name = await ticketDAO.get_service_name();
-  const issue_date = new Date();
+  try {
+    const ticket = await ticketDAO.getTicket(serviceID);
+    const service_name = await ticketDAO.get_service_name(serviceID);
+    const issue_date = new Date();
 
-  const pdfPath = `./tickets/${ticket.ticketId}.pdf`;
-  const doc = new PDFDocument();
-  doc.pipe(fs.createWriteStream(pdfPath));
-  doc
-    .fontSize(30)
-    .text('Ticket Information', {
-      align: 'center',
-    })
-    .moveDown(2);
-  doc
-    .fontSize(20)
-    .text(`Ticket Number: ${ticket.ticketId}`, {
-      align: 'left',
-    })
-    .moveDown(1);
-  doc
-    .text(`Service: ${service_name}`, {
-      align: 'left',
-    })
-    .moveDown(1);
-  doc
-    .fontSize(20)
-    .text(
-      `Date: ${issue_date.toLocaleDateString()} ${issue_date.toLocaleTimeString()}`,
-      {
+    const pdfPath = `./tickets/${ticket.ticket_number}.pdf`;
+    const eta = 7; // TO DO: calculate ETA
+    const doc = new PDFDocument();
+    doc.pipe(fs.createWriteStream(pdfPath));
+    doc
+      .fontSize(30)
+      .text('Ticket Information', {
+        align: 'center',
+      })
+      .moveDown(2);
+    doc
+      .fontSize(20)
+      .text(`Ticket Number: ${ticket.ticket_number}`, {
         align: 'left',
-      },
-    )
-    .moveDown(1);
-  doc
-    .fontSize(20)
-    .text(`Estimated Time: ${ticket.eta} minutes`, {
-      align: 'left',
-    })
-    .moveDown(2);
-  doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
-  doc.end();
-  // generate qr code
-  const downloadUrl = baseUrl + `/api/ticket/download/${ticket.ticketId}`;
-  const qrcode = await QRCode.toDataURL(downloadUrl);
-
-  res.json({ qrcode });
+      })
+      .moveDown(1);
+    doc
+      .text(`Service: ${service_name}`, {
+        align: 'left',
+      })
+      .moveDown(1);
+    doc
+      .fontSize(20)
+      .text(
+        `Date: ${issue_date.toLocaleDateString()} ${issue_date.toLocaleTimeString()}`,
+        {
+          align: 'left',
+        },
+      )
+      .moveDown(1);
+    doc
+      .fontSize(20)
+      .text(`Estimated Time: ${eta} minutes`, {
+        align: 'left',
+      })
+      .moveDown(2);
+    doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
+    doc.end();
+    // generate qr code
+    const downloadUrl = baseUrl + `/api/ticket/download/${ticket.ticketId}`;
+    const qrcode = await QRCode.toDataURL(downloadUrl);
+    res.json({ qrcode });
+  } catch (error) {
+    console.warn('Error creating ticket', error);
+    res.status(500).json({ 'Database error': error.message });
+  }
 });
 
 // Download ticket
